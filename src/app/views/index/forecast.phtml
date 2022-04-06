@@ -1,0 +1,44 @@
+<?php
+
+// echo "<pre>";
+// print_r($forecast);
+// echo "</pre>";
+
+
+foreach($forecast as $k => $v)
+{
+    if($k == 'forecast')
+    {
+        // echo "<pre>";
+        // print_r($v);
+        // echo "<br>";
+        foreach($v as $k1 => $v1)
+        {
+        //      echo "<pre>";
+        // print_r($v1);
+        // echo "<br>";
+        foreach($v as $k1 => $v1)
+        {
+            
+           foreach($v1[0] as $k2 => $v2)
+           {
+                if(isset($v2))
+                {
+                        foreach($v2 as $k3 => $v3)
+                        {
+                            if($k3 == 'maxtemp_c')
+                            {
+                            print_r($v3);
+                            }
+                        }
+                }
+           }
+        }
+            
+        }
+    }
+}
+
+
+
+?>

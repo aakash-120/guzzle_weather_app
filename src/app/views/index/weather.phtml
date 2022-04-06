@@ -1,8 +1,8 @@
 <?php
 
-echo "<pre>";
-print_r($current_var);
-echo "</pre>";
+// echo "<pre>";
+// print_r($current_var);
+// echo "</pre>";
 
 
 ?>
@@ -61,7 +61,35 @@ background-color: #f7f7fc;
     padding: 1.25rem;
 }
 .card-header:first-child {
-    border-radius: .25rem .25rem 0 0;
+    border-radius: .25rem .25rem 0 0; public function currentWeatherAction() {
+        $url = $this->request->get('c_name');
+        $len = strlen($url);
+        for ($i = 0; $i < $len; $i++) {
+            if ($url[$i] == ' ') {
+                $url[$i] = '+';
+            }
+        }
+
+        $current = 'http://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q='.$url.'&aqi=yes';
+
+
+       
+        $client = new Client([
+            'base_uri' => $current,
+        ]);
+          
+        
+        $response = $client->request('GET');
+          
+          
+        $body = $response->getBody();
+        $arr_body = json_decode($body,true);
+
+        echo "<pre>";
+        print_r($arr_body);
+       // die;
+        $this->view->current_weather = $arr_body;
+    }
 }
 .card-header {
     border-bottom-width: 1px;
@@ -118,7 +146,7 @@ background-color: #f7f7fc;
                                 
                                    
                                 ?>
-                                <form action="/index/particularCountry" method="post">
+                                <form action="/index/particularCity" method="post">
 								<tr>	
                                 							
 									<td><?php if(isset($v['name'])){ print_r($v['name']);} ?></td>
@@ -127,7 +155,7 @@ background-color: #f7f7fc;
 									<td><?php if(isset($v['lon'])){ print_r($v['lon']);} ?></td>
                                     <input type="hidden" name="c_name" value="<?php if(isset($v['name'])){ print_r($v['name']);} ?>">
                                     <input type="hidden" name="id" value="<?php if(isset($v['id'])){ print_r($v['id']);} ?>">
-                                    <td><input type = "submit" value = "submit"></td>
+                                    <td><input type = "submit" value = "submit" class="btn btn-primary"></td>
 								</tr>
                                 </form>
                                 <?php

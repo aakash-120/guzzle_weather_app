@@ -43,12 +43,72 @@ class IndexController extends Controller
 
 
     
-    public function particularCountryAction()
+    public function particularCityAction()
     { 
-        echo "aakash";
-        echo $this->request->getPost('c_name');
-        echo $this->request->getPost('id');
-        die;
+        // echo "aakash";
+        // echo $this->request->getPost('c_name');
+        // echo $this->request->getPost('id');
+        
+    }
+
+
+
+    public function currentWeatherAction() {
+        $url = $this->request->get('c_name');
+        $len = strlen($url);
+        for ($i = 0; $i < $len; $i++) {
+            if ($url[$i] == ' ') {
+                $url[$i] = '+';
+            }
+        }
+
+        $current = 'http://api.weatherapi.com/v1/current.json?key=0bab7dd1bacc418689b143833220304&q='.$url.'&aqi=yes';
+
+
+       
+        $client = new Client([
+            'base_uri' => $current,
+        ]);
+          
+        
+        $response = $client->request('GET');
+          
+          
+        $body = $response->getBody();
+        $arr_body = json_decode($body,true);
+
+        echo "<pre>";
+        print_r($arr_body);
+       // die;
+        $this->view->current_weather = $arr_body;
+    }
+
+
+    public function forecastAction() {
+
+        $url = $this->request->get('c_name');
+        $len = strlen($url);
+        for ($i = 0; $i < $len; $i++) {
+            if ($url[$i] == ' ') {
+                $url[$i] = '+';
+            }
+        }
+
+        $current = 'http://api.weatherapi.com/v1/forecast.json?key=0bab7dd1bacc418689b143833220304&q='.$url.'&days=1&aqi=yes&alerts=yes';
+        echo $current;
+     
+       
+        $client = new Client([
+            'base_uri' => $current,
+        ]);
+          
+        
+        $response = $client->request('GET');
+          
+          
+        $body = $response->getBody();
+        $arr_body = json_decode($body,true);
+        $this->view->forecast = $arr_body;
     }
   
 }
